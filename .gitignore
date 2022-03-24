@@ -1,0 +1,12 @@
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles/*
+Makefile
+librover-common.a
+liblibrover.a
+liblibrover.so
+.vscode/*
+debug.out
+install_manifest.txt
+build/*
+

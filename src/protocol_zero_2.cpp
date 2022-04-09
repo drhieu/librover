@@ -21,7 +21,7 @@ Zero2ProtocolObject::Zero2ProtocolObject(
   estop_ = false;
   motors_speeds_[FRONT_LEFT_MOTOR] = MOTOR_NEUTRAL_;
   motors_speeds_[FRONT_RIGHT_MOTOR] = MOTOR_NEUTRAL_;
-   motors_speeds_[REAR_LEFT_MOTOR] = MOTOR_NEUTRAL_;
+  motors_speeds_[REAR_LEFT_MOTOR] = MOTOR_NEUTRAL_;
   motors_speeds_[REAR_RIGHT_MOTOR] = MOTOR_NEUTRAL_;
   /* register the pid gains for closed-loop modes */
   pid_ = pid;
@@ -52,23 +52,24 @@ Zero2ProtocolObject::Zero2ProtocolObject(
         {std::numeric_limits<float>::max(), std::numeric_limits<float>::max()});
     robotmode_num_ = 0;
   }
-    
+
   /* set up the comm port */
   std::cerr << "establishing connection to rover zero..." << std::endl;
-  try{
-  register_comm_base(device);
+  try {
+    register_comm_base(device);
   }
-  catch{
-      std::cerr << "error establishing connection to Rover Zero, please check cabling and power to the motor controller (VESC)" << std::endl;
+  catch (const std::exception &e) {
+    std::cerr << "error establishing connection to Rover Zero, please check "
+                 "cabling and power to the motor controller (VESC)"
+              << std::endl;
   }
-    
-    
+
   /* create a dedicated write thread to send commands to the robot on fixed
    * interval */
   std::cerr << "creating thread to communicate with rover zero..." << std::endl;
   write_to_robot_thread_ =
       std::thread([this]() { this->send_getvalues_command(10); });
-    
+
   /* create a dedicate thread to compute the desired robot motion, runs on fixed
    * interval */
   motor_speed_update_thread_ =
@@ -450,7 +451,6 @@ void Zero2ProtocolObject::send_getvalues_command(int sleeptime) {
       write_buffer.push_back(STOP_BYTE_);
       comm_base_->write_to_device(write_buffer);
       robotstatus_mutex_.unlock();
-
       robotstatus_mutex_.lock();
       uint8_t payload2[3];
       payload2[0] = COMM_CAN_FORWARD;
@@ -467,9 +467,7 @@ void Zero2ProtocolObject::send_getvalues_command(int sleeptime) {
       write_buffer.push_back(STOP_BYTE_);
       comm_base_->write_to_device(write_buffer);
       robotstatus_mutex_.unlock();
-
       robotstatus_mutex_.lock();
-      uint8_t payload2[3];
       payload2[0] = COMM_CAN_FORWARD;
       payload2[1] = REAR_LEFT_MOTOR;
       payload2[2] = COMM_GET_VALUES;
@@ -484,9 +482,7 @@ void Zero2ProtocolObject::send_getvalues_command(int sleeptime) {
       write_buffer.push_back(STOP_BYTE_);
       comm_base_->write_to_device(write_buffer);
       robotstatus_mutex_.unlock();
-
       robotstatus_mutex_.lock();
-      uint8_t payload2[3];
       payload2[0] = COMM_CAN_FORWARD;
       payload2[1] = REAR_RIGHT_MOTOR;
       payload2[2] = COMM_GET_VALUES;
@@ -566,7 +562,6 @@ void Zero2ProtocolObject::send_motors_commands() {
   robotstatus_mutex_.unlock();
   //
   v = static_cast<int32_t>(motors_speeds_[REAR_RIGHT_MOTOR] * 100000.0);
-  unsigned char payload2[7];
   payload2[0] = COMM_CAN_FORWARD;
   payload2[1] = REAR_RIGHT_MOTOR;
   payload2[2] = COMM_SET_DUTY;
@@ -592,7 +587,6 @@ void Zero2ProtocolObject::send_motors_commands() {
   robotstatus_mutex_.unlock();
   //
   v = static_cast<int32_t>(motors_speeds_[FRONT_RIGHT_MOTOR] * 100000.0);
-  unsigned char payload2[7];
   payload2[0] = COMM_CAN_FORWARD;
   payload2[1] = FRONT_RIGHT_MOTOR;
   payload2[2] = COMM_SET_DUTY;

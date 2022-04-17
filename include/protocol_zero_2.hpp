@@ -22,12 +22,12 @@ private:
   /* limit to the trim that can be applied; more than this means a robot issue*/
   const float MAX_CURVATURE_CORRECTION_ = .15;
   const int MOTOR_NEUTRAL_ = 0;
-  const float MOTOR_MAX_ = 0.95;
-  const float MOTOR_MIN_ = -0.95;
+  const float MOTOR_MAX_ = 0.05;
+  const float MOTOR_MIN_ = -0.05;
   const float LINEAR_JERK_LIMIT_ = 5;
   const double odom_angular_coef_ = 2.3;    
   const double odom_traction_factor_ = 0.7; 
-  const double CONTROL_LOOP_TIMEOUT_MS_ = 200;
+  const double CONTROL_LOOP_TIMEOUT_MS_ = 500;
   const uint8_t PAYLOAD_BYTE_SIZE_ = 2;
   const uint8_t STOP_BYTE_ = 3;
   const uint8_t MSG_SIZE_ = 5;
@@ -83,8 +83,10 @@ private:
   {
     FRONT_LEFT_MOTOR = 1,
     FRONT_RIGHT_MOTOR = 2,
-    REAR_LEFT_MOTOR = 3,
-    REAR_RIGHT_MOTOR = 4
+    MID_LEFT_MOTOR = 3,
+    MID_RIGHT_MOTOR = 4,
+    REAR_LEFT_MOTOR = 5,
+    REAR_RIGHT_MOTOR = 6
   };
   /*
    * @brief Thread Driven function that will send commands to the robot at set

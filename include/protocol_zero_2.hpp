@@ -22,8 +22,8 @@ private:
   /* limit to the trim that can be applied; more than this means a robot issue*/
   const float MAX_CURVATURE_CORRECTION_ = .15;
   const int MOTOR_NEUTRAL_ = 0;
-  const float MOTOR_MAX_ = 0.05;
-  const float MOTOR_MIN_ = -0.05;
+  const float MOTOR_MAX_ = 0.95;
+  const float MOTOR_MIN_ = -0.95;
   const float LINEAR_JERK_LIMIT_ = 5;
   const double odom_angular_coef_ = 2.3;    
   const double odom_traction_factor_ = 0.7; 

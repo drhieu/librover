@@ -191,198 +191,198 @@ void Zero2ProtocolObject::motors_control_loop(int sleeptime) {
   }
 }
 void Zero2ProtocolObject::unpack_comm_response(std::vector<uint8_t> robotmsg) {
-  // static std::vector<uint8_t> msgqueue;
-  // robotstatus_mutex_.lock();
-  // msgqueue.insert(msgqueue.end(), robotmsg.begin(),
-  //                 robotmsg.end());  // insert robotmsg to msg list
+  static std::vector<uint8_t> msgqueue;
+  robotstatus_mutex_.lock();
+  msgqueue.insert(msgqueue.end(), robotmsg.begin(),
+                  robotmsg.end());  // insert robotmsg to msg list
 
-  // // valid msg check
-  // int msg_size = msgqueue[1] + 4;
-  // if (msgqueue.size() >= msg_size && msgqueue[0] == START_BYTE_ &&
-  //     msgqueue[msg_size] == STOP_BYTE_) {
-  //   int payload_index = 3;
-  //   int16_t v16;
-  //   int32_t v32;
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   vesc_fet_temp_ = static_cast<double>(v16) / 10.0;
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   vesc_motor_temp_ = static_cast<double>(v16) / 10.0;
-  //   v32 = static_cast<int32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_all_motor_current_ = static_cast<float>(v32) / 100.0;
-  //   v32 = static_cast<int32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_all_input_current_ = static_cast<float>(v32) / 100.0;
-  //   v32 = static_cast<int32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_id_ = static_cast<float>(v32) / 100.0;
-  //   v32 = static_cast<int32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_iq_ = static_cast<float>(v32) / 100.0;
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   vesc_duty_ = static_cast<double>(v16) / 1000.0;
-  //   v32 = static_cast<int32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_rpm_ = static_cast<int32_t>(v32);
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   vesc_v_in_ = static_cast<double>(v16) / 10.0;
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_amp_hours_ = static_cast<double>(v32) / 10000.0;
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_amp_hours_charged_ = static_cast<double>(v32) / 10000.0;
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_watt_hours_ = static_cast<double>(v32) / 10000.0;
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_watt_hours_charged_ = static_cast<double>(v32) / 10000.0;
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_tach_ = static_cast<double>(v32);
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_tach_abs_ = static_cast<double>(v32);
-  //   vesc_fault_ = static_cast<uint8_t>(msgqueue[++payload_index]);
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   vesc_pid_pos_ = static_cast<double>(v32) / 1000000.0;
-  //   vesc_dev_id_ = static_cast<uint8_t>(msgqueue[++payload_index]);
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   double temp1 = static_cast<double>(v16) / 10.0;
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   double temp2 = static_cast<double>(v16) / 10.0;
-  //   v16 = static_cast<int16_t>(
-  //       (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint16_t>(msgqueue[++payload_index]));
-  //   double temp3 = static_cast<double>(v16) / 10.0;
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   double reset_avg_vd = static_cast<double>(v32);
-  //   v32 = static_cast<uint32_t>(
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
-  //       (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
-  //       static_cast<uint32_t>(msgqueue[++payload_index]));
-  //   double reset_avg_vq = static_cast<double>(v32);
-  //   std::cerr << std::flush;
-  //   msgqueue.clear();
-  //   // msgqueue.resize(0);
-  //   if (vesc_dev_id_ == FRONT_LEFT_MOTOR) {
-  //     robotstatus_.motor1_id = vesc_dev_id_;
-  //     robotstatus_.motor1_current = vesc_all_input_current_;
-  //     robotstatus_.motor1_rpm = vesc_rpm_;
-  //     robotstatus_.motor1_temp = vesc_motor_temp_;
-  //     robotstatus_.motor1_mos_temp = vesc_fet_temp_;
-  //   } else if (vesc_dev_id_ == FRONT_RIGHT_MOTOR) {
-  //     robotstatus_.motor2_id = vesc_dev_id_;
-  //     robotstatus_.motor2_current = vesc_all_input_current_;
-  //     robotstatus_.motor2_rpm = vesc_rpm_;
-  //     robotstatus_.motor2_temp = vesc_motor_temp_;
-  //     robotstatus_.motor2_mos_temp = vesc_fet_temp_;
-  //   } else if (vesc_dev_id_ == REAR_LEFT_MOTOR) {
-  //     robotstatus_.motor3_id = vesc_dev_id_;
-  //     robotstatus_.motor3_current = vesc_all_input_current_;
-  //     robotstatus_.motor3_rpm = vesc_rpm_;
-  //     robotstatus_.motor3_temp = vesc_motor_temp_;
-  //     robotstatus_.motor3_mos_temp = vesc_fet_temp_;
-  //   } else if (vesc_dev_id_ == REAR_RIGHT_MOTOR) {
-  //     robotstatus_.motor4_id = vesc_dev_id_;
-  //     robotstatus_.motor4_current = vesc_all_input_current_;
-  //     robotstatus_.motor4_rpm = vesc_rpm_;
-  //     robotstatus_.motor4_temp = vesc_motor_temp_;
-  //     robotstatus_.motor4_mos_temp = vesc_fet_temp_;
-  //   }
-  //   robotstatus_.battery1_voltage = vesc_v_in_;
-  //   robotstatus_.battery1_fault_flag = 0;
-  //   robotstatus_.battery2_voltage = 0;
-  //   robotstatus_.battery1_temp = 0;
-  //   robotstatus_.battery2_temp = 0;
-  //   robotstatus_.battery1_current = vesc_all_input_current_;
-  //   robotstatus_.battery2_current = 0;
-  //   robotstatus_.battery1_SOC = 0;
-  //   robotstatus_.battery2_SOC = 0;
-  //   robotstatus_.battery1_fault_flag = 0;
-  //   robotstatus_.battery2_fault_flag = 0;
-  //   robotstatus_.robot_guid = 0;
-  //   robotstatus_.robot_firmware = 0;
-  //   robotstatus_.robot_fault_flag = vesc_fault_;
-  //   robotstatus_.robot_fan_speed = 0;
-  //   robotstatus_.robot_speed_limit = 0;
-  // } else if (msgqueue.size() > msg_size && msgqueue[0] != START_BYTE_) {
-  //   int start_byte_index = 0;
-  //   // !Did not find valid start byte in buffer
-  //   while (msgqueue[start_byte_index] != START_BYTE_ &&
-  //          start_byte_index < msgqueue.size())
-  //     start_byte_index++;
-  //   if (start_byte_index >= msgqueue.size()) {
-  //     msgqueue.clear();
-  //     return;
-  //   } else {
-  //     // !Reconstruct the vector so that the start byte is at the 0 position
-  //     std::vector<uint8_t> temp;
-  //     for (int x = start_byte_index; x < msgqueue.size(); x++) {
-  //       temp.push_back(msgqueue[x]);
-  //     }
-  //     msgqueue.clear();
-  //     msgqueue.resize(0);
-  //     msgqueue = temp;
-  //     temp.clear();
-  //   }
-  // }
-  // robotstatus_mutex_.unlock();
+  // valid msg check
+  int msg_size = msgqueue[1] + 4;
+  if (msgqueue.size() >= msg_size && msgqueue[0] == START_BYTE_ &&
+      msgqueue[msg_size] == STOP_BYTE_) {
+    int payload_index = 3;
+    int16_t v16;
+    int32_t v32;
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    vesc_fet_temp_ = static_cast<double>(v16) / 10.0;
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    vesc_motor_temp_ = static_cast<double>(v16) / 10.0;
+    v32 = static_cast<int32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_all_motor_current_ = static_cast<float>(v32) / 100.0;
+    v32 = static_cast<int32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_all_input_current_ = static_cast<float>(v32) / 100.0;
+    v32 = static_cast<int32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_id_ = static_cast<float>(v32) / 100.0;
+    v32 = static_cast<int32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_iq_ = static_cast<float>(v32) / 100.0;
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    vesc_duty_ = static_cast<double>(v16) / 1000.0;
+    v32 = static_cast<int32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_rpm_ = static_cast<int32_t>(v32);
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    vesc_v_in_ = static_cast<double>(v16) / 10.0;
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_amp_hours_ = static_cast<double>(v32) / 10000.0;
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_amp_hours_charged_ = static_cast<double>(v32) / 10000.0;
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_watt_hours_ = static_cast<double>(v32) / 10000.0;
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_watt_hours_charged_ = static_cast<double>(v32) / 10000.0;
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_tach_ = static_cast<double>(v32);
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_tach_abs_ = static_cast<double>(v32);
+    vesc_fault_ = static_cast<uint8_t>(msgqueue[++payload_index]);
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    vesc_pid_pos_ = static_cast<double>(v32) / 1000000.0;
+    vesc_dev_id_ = static_cast<uint8_t>(msgqueue[++payload_index]);
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    double temp1 = static_cast<double>(v16) / 10.0;
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    double temp2 = static_cast<double>(v16) / 10.0;
+    v16 = static_cast<int16_t>(
+        (static_cast<uint16_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint16_t>(msgqueue[++payload_index]));
+    double temp3 = static_cast<double>(v16) / 10.0;
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    double reset_avg_vd = static_cast<double>(v32);
+    v32 = static_cast<uint32_t>(
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 24) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 16) +
+        (static_cast<uint32_t>(msgqueue[++payload_index]) << 8) +
+        static_cast<uint32_t>(msgqueue[++payload_index]));
+    double reset_avg_vq = static_cast<double>(v32);
+    std::cerr << std::flush;
+    msgqueue.clear();
+    // msgqueue.resize(0);
+    if (vesc_dev_id_ == FRONT_LEFT_MOTOR) {
+      robotstatus_.motor1_id = vesc_dev_id_;
+      robotstatus_.motor1_current = vesc_all_input_current_;
+      robotstatus_.motor1_rpm = vesc_rpm_;
+      robotstatus_.motor1_temp = vesc_motor_temp_;
+      robotstatus_.motor1_mos_temp = vesc_fet_temp_;
+    } else if (vesc_dev_id_ == FRONT_RIGHT_MOTOR) {
+      robotstatus_.motor2_id = vesc_dev_id_;
+      robotstatus_.motor2_current = vesc_all_input_current_;
+      robotstatus_.motor2_rpm = vesc_rpm_;
+      robotstatus_.motor2_temp = vesc_motor_temp_;
+      robotstatus_.motor2_mos_temp = vesc_fet_temp_;
+    } else if (vesc_dev_id_ == REAR_LEFT_MOTOR) {
+      robotstatus_.motor3_id = vesc_dev_id_;
+      robotstatus_.motor3_current = vesc_all_input_current_;
+      robotstatus_.motor3_rpm = vesc_rpm_;
+      robotstatus_.motor3_temp = vesc_motor_temp_;
+      robotstatus_.motor3_mos_temp = vesc_fet_temp_;
+    } else if (vesc_dev_id_ == REAR_RIGHT_MOTOR) {
+      robotstatus_.motor4_id = vesc_dev_id_;
+      robotstatus_.motor4_current = vesc_all_input_current_;
+      robotstatus_.motor4_rpm = vesc_rpm_;
+      robotstatus_.motor4_temp = vesc_motor_temp_;
+      robotstatus_.motor4_mos_temp = vesc_fet_temp_;
+    }
+    robotstatus_.battery1_voltage = vesc_v_in_;
+    robotstatus_.battery1_fault_flag = 0;
+    robotstatus_.battery2_voltage = 0;
+    robotstatus_.battery1_temp = 0;
+    robotstatus_.battery2_temp = 0;
+    robotstatus_.battery1_current = vesc_all_input_current_;
+    robotstatus_.battery2_current = 0;
+    robotstatus_.battery1_SOC = 0;
+    robotstatus_.battery2_SOC = 0;
+    robotstatus_.battery1_fault_flag = 0;
+    robotstatus_.battery2_fault_flag = 0;
+    robotstatus_.robot_guid = 0;
+    robotstatus_.robot_firmware = 0;
+    robotstatus_.robot_fault_flag = vesc_fault_;
+    robotstatus_.robot_fan_speed = 0;
+    robotstatus_.robot_speed_limit = 0;
+  } else if (msgqueue.size() > msg_size && msgqueue[0] != START_BYTE_) {
+    int start_byte_index = 0;
+    // !Did not find valid start byte in buffer
+    while (msgqueue[start_byte_index] != START_BYTE_ &&
+           start_byte_index < msgqueue.size())
+      start_byte_index++;
+    if (start_byte_index >= msgqueue.size()) {
+      msgqueue.clear();
+      return;
+    } else {
+      // !Reconstruct the vector so that the start byte is at the 0 position
+      std::vector<uint8_t> temp;
+      for (int x = start_byte_index; x < msgqueue.size(); x++) {
+        temp.push_back(msgqueue[x]);
+      }
+      msgqueue.clear();
+      msgqueue.resize(0);
+      msgqueue = temp;
+      temp.clear();
+    }
+  }
+  robotstatus_mutex_.unlock();
 }
 
 bool Zero2ProtocolObject::is_connected() {
@@ -431,82 +431,81 @@ void Zero2ProtocolObject::register_comm_base(const char *device) {
 }
 
 void Zero2ProtocolObject::send_getvalues_command(int sleeptime) {
-  // while (true) {
-  //   if (comm_type_ == "serial") {
-  //     unsigned char *payloadptr;
-  //     uint16_t crc;
-  //     std::vector<uint8_t> write_buffer;
-  //     uint8_t MSG_SIZE = 1;
-  //     robotstatus_mutex_.lock();
-  //     uint8_t payload[1];
-  //     payload[0] = COMM_GET_VALUES;
-  //     payloadptr = payload;
-  //     write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_GET_VALUES};
-  //     crc = crc16(payloadptr, MSG_SIZE);
-  //     write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
-  //     write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
-  //     write_buffer.push_back(STOP_BYTE_);
-  //     comm_base_->write_to_device(write_buffer);
-  //     robotstatus_mutex_.unlock();
-  //     robotstatus_mutex_.lock();
-  //     uint8_t payload2[3];
-  //     payload2[0] = COMM_CAN_FORWARD;
-  //     payload2[1] = FRONT_RIGHT_MOTOR;
-  //     payload2[2] = COMM_GET_VALUES;
-  //     payloadptr = payload2;
-  //     MSG_SIZE = 3;
-  //     write_buffer.clear();
-  //     write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_CAN_FORWARD,
-  //                     FRONT_RIGHT_MOTOR, COMM_GET_VALUES};
-  //     crc = crc16(payloadptr, MSG_SIZE);
-  //     write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
-  //     write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
-  //     write_buffer.push_back(STOP_BYTE_);
-  //     comm_base_->write_to_device(write_buffer);
-  //     robotstatus_mutex_.unlock();
-  //     robotstatus_mutex_.lock();
-  //     payload2[0] = COMM_CAN_FORWARD;
-  //     payload2[1] = REAR_LEFT_MOTOR;
-  //     payload2[2] = COMM_GET_VALUES;
-  //     payloadptr = payload2;
-  //     MSG_SIZE = 3;
-  //     write_buffer.clear();
-  //     write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_CAN_FORWARD,
-  //                     REAR_LEFT_MOTOR, COMM_GET_VALUES};
-  //     crc = crc16(payloadptr, MSG_SIZE);
-  //     write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
-  //     write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
-  //     write_buffer.push_back(STOP_BYTE_);
-  //     comm_base_->write_to_device(write_buffer);
-  //     robotstatus_mutex_.unlock();
-  //     robotstatus_mutex_.lock();
-  //     payload2[0] = COMM_CAN_FORWARD;
-  //     payload2[1] = REAR_RIGHT_MOTOR;
-  //     payload2[2] = COMM_GET_VALUES;
-  //     payloadptr = payload2;
-  //     MSG_SIZE = 3;
-  //     write_buffer.clear();
-  //     write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_CAN_FORWARD,
-  //                     REAR_RIGHT_MOTOR, COMM_GET_VALUES};
-  //     crc = crc16(payloadptr, MSG_SIZE);
-  //     write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
-  //     write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
-  //     write_buffer.push_back(STOP_BYTE_);
-  //     comm_base_->write_to_device(write_buffer);
-  //     robotstatus_mutex_.unlock();
-  //   } else if (comm_type_ == "can") {
-  //     return;
-  //   } else {   //! How did you get here?
-  //     return;  // TODO: Return error ?
-  //   }
-  //   std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
-  // }
+  while (true) {
+    if (comm_type_ == "serial") {
+      unsigned char *payloadptr;
+      uint16_t crc;
+      std::vector<uint8_t> write_buffer;
+      uint8_t MSG_SIZE = 1;
+      robotstatus_mutex_.lock();
+      uint8_t payload[1];
+      payload[0] = COMM_GET_VALUES;
+      payloadptr = payload;
+      write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_GET_VALUES};
+      crc = crc16(payloadptr, MSG_SIZE);
+      write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
+      write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
+      write_buffer.push_back(STOP_BYTE_);
+      comm_base_->write_to_device(write_buffer);
+      robotstatus_mutex_.unlock();
+      robotstatus_mutex_.lock();
+      uint8_t payload2[3];
+      payload2[0] = COMM_CAN_FORWARD;
+      payload2[1] = FRONT_RIGHT_MOTOR;
+      payload2[2] = COMM_GET_VALUES;
+      payloadptr = payload2;
+      MSG_SIZE = 3;
+      write_buffer.clear();
+      write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_CAN_FORWARD,
+                      FRONT_RIGHT_MOTOR, COMM_GET_VALUES};
+      crc = crc16(payloadptr, MSG_SIZE);
+      write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
+      write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
+      write_buffer.push_back(STOP_BYTE_);
+      comm_base_->write_to_device(write_buffer);
+      robotstatus_mutex_.unlock();
+      robotstatus_mutex_.lock();
+      payload2[0] = COMM_CAN_FORWARD;
+      payload2[1] = REAR_LEFT_MOTOR;
+      payload2[2] = COMM_GET_VALUES;
+      payloadptr = payload2;
+      MSG_SIZE = 3;
+      write_buffer.clear();
+      write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_CAN_FORWARD,
+                      REAR_LEFT_MOTOR, COMM_GET_VALUES};
+      crc = crc16(payloadptr, MSG_SIZE);
+      write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
+      write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
+      write_buffer.push_back(STOP_BYTE_);
+      comm_base_->write_to_device(write_buffer);
+      robotstatus_mutex_.unlock();
+      robotstatus_mutex_.lock();
+      payload2[0] = COMM_CAN_FORWARD;
+      payload2[1] = REAR_RIGHT_MOTOR;
+      payload2[2] = COMM_GET_VALUES;
+      payloadptr = payload2;
+      MSG_SIZE = 3;
+      write_buffer.clear();
+      write_buffer = {PAYLOAD_BYTE_SIZE_, MSG_SIZE, COMM_CAN_FORWARD,
+                      REAR_RIGHT_MOTOR, COMM_GET_VALUES};
+      crc = crc16(payloadptr, MSG_SIZE);
+      write_buffer.push_back(static_cast<uint8_t>(crc >> 8));
+      write_buffer.push_back(static_cast<uint8_t>(crc & 0xFF));
+      write_buffer.push_back(STOP_BYTE_);
+      comm_base_->write_to_device(write_buffer);
+      robotstatus_mutex_.unlock();
+    } else if (comm_type_ == "can") {
+      return;
+    } else {   //! How did you get here?
+      return;  // TODO: Return error ?
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
+  }
 }
 
 void Zero2ProtocolObject::send_motors_commands() {
-  std::cerr << "beep" << std::endl;
   uint8_t payload[5];
-  unsigned char payload2[7];
+  uint8_t payload2[7];
   robotstatus_mutex_.lock();
   int32_t v =
       static_cast<int32_t>(motors_speeds_[FRONT_LEFT_MOTOR - 1] * 100000.0);
@@ -692,8 +691,6 @@ void Zero2ProtocolObject::send_motors_commands() {
   comm_base_->write_to_device(write_buffer);
   robotstatus_mutex_.unlock();
   write_buffer.clear();
-  std::cerr << "boop" << std::endl;
-
 }
 unsigned short Zero2ProtocolObject::crc16(unsigned char *buf,
                                           unsigned int len) {
